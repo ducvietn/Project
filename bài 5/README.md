@@ -1,58 +1,15 @@
-Đoạn A: 
- * Code smell: 
-  - Poor Naming: tên biến t, h, r, m, f quá ngắn, khó hiểu.
-  - Magic Number: 0.9 xuất hiện trực tiếp trong code.
-  - Unused Parameter: tham số t không được dùng.
- * Vì sao là vấn đề: 
-  - Khó đọc, khó bảo trì.
-  - Người khác nhìn vào không biết m là gì, r là gì.
-  - Số 0.9 không nói rõ ý nghĩa là giảm giá thành viên hay gì khác.
-  - t làm rối API vì truyền vào nhưng không có tác dụng.
- * Refactor phù hợp:
-  - Rename variables
-  - Replace Magic Number with Constant
-  - Nếu được phép đổi API thì Remove Parameter với t
+1) Các trách nhiệm mà StudentManager đang gánh
+- StudentManager hiện đang làm ít nhất 6 việc:
+  + Quản lý thông tin sinh viên: studentId, name, gpa
+  + Quản lý thông tin môn học: courseId, courseName, credits
+  + Quản lý điểm thành phần: midtermScore, finalScore, assignmentScore
+  + Tính điểm tổng kết: calculateFinalGrade()
+  + Xếp loại học lực: getAcademicStatus()
+  + In bảng điểm / trình bày output: printTranscript()
 
 
-Đoạn B
- * Code smell:
-  - Large Class / God Class
-  - Violation of Single Responsibility Principle
- * Vì sao là vấn đề:
-  - UserService đang làm quá nhiều việc:
-   + tìm user
-   + gửi email chào mừng
-   + gửi email reset mật khẩu
-   + render profile
-   + export CSV
- * Refactor phù hợp
-  - Extract Class
-  - Tách mỗi trách nhiệm sang một class riêng
-
-Đoạn C:
- * Code smell:
-  - Switch/Conditional Complexity (ở đây là chuỗi if theo loại hình)
-  - Primitive Obsession: dùng String shapeType để quyết định hành vi
-  - Magic Number: 3.14159
- * Vì sao là vấn đề:
-  - Mỗi lần thêm hình mới lại phải sửa hàm getArea, vi phạm nguyên tắc Open/Closed Principle.
-  - Dùng chuỗi "rectangle", "triangle", "circle" rất dễ gõ sai.
- * Refactor phù hợp
-  - Replace Conditional with Polymorphism
-  - Extract Constant
-
-
-Đoạn D:
- * Code smell:
-  - Data Clumps
-  - Có dấu hiệu nên Extract Class
- * Vì sao là vấn đề:
-  - Các thuộc tính:
-   + authorEmail
-   + authorName
-   + authorPhone
-   + authorAddress
-  luôn đi cùng nhau, tạo thành một nhóm dữ liệu logic: Author.
-
- * Refactor phù hợp
-  - Extract Class
+3) Vì TeachingAssistant cũng có id và name, nhưng không có gpa, nên không nên nhét gpa vào một class cha chung rồi để mang theo một thuộc tính vô nghĩa.
+Giải pháp hợp lý là:
+- tạo class cha Person chỉ chứa phần chung : id,name
+- Student extends Person và thêm gpa
+- TeachingAssistant extends Person: không có gpa
